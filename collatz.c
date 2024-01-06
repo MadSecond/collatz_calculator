@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <gmp.h>
 #include <time.h>
+#include <unistd.h>
+
+#define SLEEP_TIME 200000
 
 int main(){
 
@@ -25,9 +28,9 @@ int main(){
 label:
     mpz_set(n, x);
     mpz_sub_ui(n, n, 1);
-    printf("Checking (%lu^%lu)-1 ...", base, exponent);
-    //mpz_out_str(stdout,10,n);
-    //usleep(10000);
+    printf("Checking (%lu^%lu)-1 ...\n", base, exponent);
+    mpz_out_str(stdout,10,n);
+    printf("\n");
     fflush(stdout);
     start = clock();
 
@@ -39,13 +42,13 @@ label:
         mpz_mul_ui(n, n, 3);
         mpz_add_ui(n, n, 1);
         };
-        //usleep(10000);
-        //mpz_out_str(stdout, 10, n);
-        //printf("\n");
+        usleep(SLEEP_TIME);
+        mpz_out_str(stdout, 10, n);
+        printf("\n");
     }
     end = clock();
     cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-    printf("ENDS IN LOOP! time taken to calculate: %lf seconds\n",cpu_time_used);
+    printf("(%lu^%lu)-1 ENDS IN A LOOP! time taken to calculate: %lf seconds\n",base, exponent, cpu_time_used);
     exponent++;
     mpz_mul_ui(x, x, base);
     goto label; //Can be made into a while(1) loop, but one goto in small code is fine
